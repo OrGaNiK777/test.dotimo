@@ -20,13 +20,10 @@ body {
 
 @media (max-width: 768px) {
 	.playground {
-		height: 100vh;
-		width: 100vw;
+		height: 90%;
+		width: 90%;
 	}
-	.controlUnit {
-		top: 150px;
-		right: 0;
-	}
+
 }
 
 .controlUnit {
