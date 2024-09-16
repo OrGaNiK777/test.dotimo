@@ -13,63 +13,78 @@ let attachOffsetY2 = 0
 
 function makeDraggable(cube) {
 	cube.onmousedown = function (e) {
-		let shiftX = e.clientX - cube.getBoundingClientRect().left
-		let shiftY = e.clientY - cube.getBoundingClientRect().top
+		handleMouseDown(e, cube)
+	}
 
-		function moveAt(pageX, pageY) {
-			selectedCube1 = cube
-			const rect = playground.getBoundingClientRect()
-			let newX = pageX - rect.left - shiftX
-			let newY = pageY - rect.top - shiftY
+	cube.ontouchstart = function (e) {
+		e.preventDefault() // предотвращаем стандартное поведение
+		handleMouseDown(e.touches[0], cube) // используем первый тач
+	}
+}
 
-			if (newX < 0) newX = 0
-			if (newY < 0) newY = 0
-			if (newX + cube.offsetWidth > playground.offsetWidth) {
-				newX = playground.offsetWidth - cube.offsetWidth
-			}
-			if (newY + cube.offsetHeight > playground.offsetHeight) {
-				newY = playground.offsetHeight - cube.offsetHeight
-			}
+function handleMouseDown(e, cube) {
+	let shiftX = e.clientX - cube.getBoundingClientRect().left
+	let shiftY = e.clientY - cube.getBoundingClientRect().top
 
-			if (attached && (cube === cube1 || cube === cube2)) {
-				cube1.style.left = newX + attachOffsetX1 + 'px'
-				cube1.style.top = newY + attachOffsetY1 + 'px'
-				cube2.style.left = newX + attachOffsetX2 + 'px'
-				cube2.style.top = newY + attachOffsetY2 + 'px'
-			} else {
-				cube.style.left = newX + 'px'
-				cube.style.top = newY + 'px'
-			}
+	function moveAt(pageX, pageY) {
+		selectedCube1 = cube
+		const rect = playground.getBoundingClientRect()
+		let newX = pageX - rect.left - shiftX
+		let newY = pageY - rect.top - shiftY
 
-			checkAttach()
+		if (newX < 0) newX = 0
+		if (newY < 0) newY = 0
+		if (newX + cube.offsetWidth > playground.offsetWidth) {
+			newX = playground.offsetWidth - cube.offsetWidth
+		}
+		if (newY + cube.offsetHeight > playground.offsetHeight) {
+			newY = playground.offsetHeight - cube.offsetHeight
 		}
 
-		function onMouseMove(e) {
-			moveAt(e.pageX, e.pageY)
+		if (attached && (cube === cube1 || cube === cube2)) {
+			cube1.style.left = newX + attachOffsetX1 + 'px'
+			cube1.style.top = newY + attachOffsetY1 + 'px'
+			cube2.style.left = newX + attachOffsetX2 + 'px'
+			cube2.style.top = newY + attachOffsetY2 + 'px'
+		} else {
+			cube.style.left = newX + 'px'
+			cube.style.top = newY + 'px'
 		}
 
-		document.addEventListener('mousemove', onMouseMove)
+		checkAttach()
+	}
 
-		document.onmouseup = function () {
-			document.removeEventListener('mousemove', onMouseMove)
-		}
+	function onMouseMove(e) {
+		moveAt(e.pageX, e.pageY)
+	}
 
-		cube.onclick = function (event) {
-			event.stopPropagation()
-			if (selectedCube2 === cube) {
+	document.addEventListener('mousemove', onMouseMove)
+
+	document.onmouseup = function () {
+		document.removeEventListener('mousemove', onMouseMove)
+	}
+
+	cube.onclick = function (event) {
+		event.stopPropagation()
+		if (selectedCube2 === cube) {
+			selectedCube2.style.border = null
+			selectedCube2 = null
+		} else {
+			if (selectedCube2) {
 				selectedCube2.style.border = null
 				selectedCube2 = null
-			} else {
-				if (selectedCube2) {
-					selectedCube2.style.border = null
-					selectedCube2 = null
-				}
-				selectedCube2 = cube
-				cube.style.border = `5px solid black`
-				colorPicker.value = rgbToHex(cube.style.backgroundColor)
 			}
+			selectedCube2 = cube
+			cube.style.border = `5px solid black`
+			colorPicker.value = rgbToHex(cube.style.backgroundColor)
 		}
 	}
+}
+
+function handleTouchMove(e) {
+	e.preventDefault()
+	const touch = e.touches[0]
+	moveAt(touch.pageX, touch.pageY)
 }
 
 function rgbToHex(rgb) {
@@ -100,8 +115,6 @@ function checkAttach() {
 }
 
 function mergeCubes(rect1, rect2) {
-	const playgroundRect = playground.getBoundingClientRect()
-
 	const distanceRight = rect1.right - rect2.left
 	const distanceLeft = rect1.left - rect2.right
 	const distanceTop = rect1.top - rect2.bottom
