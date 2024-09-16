@@ -1,0 +1,58 @@
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	margin: 0;
+	background-color: #f0f0f0;
+	user-select: none;
+}
+
+.playground {
+	position: relative;
+	width: 800px;
+	height: 800px;
+	border: 2px solid #333;
+	overflow: hidden;
+	user-select: none;
+	background-color: #b6b6b662;
+}
+.controlUnit {
+	padding: 20px 20px 0 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	z-index: 1;
+}
+
+.cube {
+	border: 5px dashed black;
+	position: absolute;
+	cursor: pointer;
+	user-select: none;
+}
+
+.changСolor {
+	font-weight: 600;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: white;
+	width: 250px;
+	height: 100px;
+	margin-bottom: 15px;
+}
+
+#detachButton {
+	color: rgb(255, 255, 255);
+	font-size: 16px;
+	font-weight: 600;
+	background-color: blue;
+	width: 150px;
+	height: 50px;
+}
