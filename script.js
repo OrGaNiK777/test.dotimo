@@ -15,11 +15,6 @@ function makeDraggable(cube) {
 	cube.onmousedown = function (e) {
 		handleMouseDown(e, cube)
 	}
-
-	cube.ontouchstart = function (e) {
-		e.preventDefault() // предотвращаем стандартное поведение
-		handleMouseDown(e.touches[0], cube) // используем первый тач
-	}
 }
 
 function handleMouseDown(e, cube) {
@@ -64,6 +59,15 @@ function handleMouseDown(e, cube) {
 		document.removeEventListener('mousemove', onMouseMove)
 	}
 
+	cube.ontouchmove = function (e) {
+		const touch = e.touches[0]
+		moveAt(touch.pageX, touch.pageY)
+	}
+
+	document.ontouchend = function () {
+		document.removeEventListener('touchmove', moveAt)
+	}
+
 	cube.onclick = function (event) {
 		event.stopPropagation()
 		if (selectedCube2 === cube) {
@@ -79,12 +83,6 @@ function handleMouseDown(e, cube) {
 			colorPicker.value = rgbToHex(cube.style.backgroundColor)
 		}
 	}
-}
-
-function handleTouchMove(e) {
-	e.preventDefault()
-	const touch = e.touches[0]
-	moveAt(touch.pageX, touch.pageY)
 }
 
 function rgbToHex(rgb) {

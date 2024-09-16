@@ -17,6 +17,18 @@ body {
 	user-select: none;
 	background-color: #b6b6b662;
 }
+
+@media (max-width: 768px) {
+	.playground {
+		height: 100vh;
+		width: 100vw;
+	}
+	.controlUnit {
+		top: 150px;
+		right: 0;
+	}
+}
+
 .controlUnit {
 	padding: 20px 20px 0 0;
 	position: absolute;
