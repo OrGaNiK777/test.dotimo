@@ -21,6 +21,16 @@ function handleMouseDown(e, cube) {
 	let shiftX = e.clientX - cube.getBoundingClientRect().left
 	let shiftY = e.clientY - cube.getBoundingClientRect().top
 
+	if (attached) {
+		if (cube === cube1) {
+			shiftX = shiftX + attachOffsetX1;
+			shiftY = shiftY + attachOffsetY1;
+		} else if (cube === cube2) {
+			shiftX = shiftX + attachOffsetX2;
+			shiftY = shiftY + attachOffsetY2;
+		}
+	}
+
 	function moveAt(pageX, pageY) {
 		selectedCube1 = cube
 		const rect = playground.getBoundingClientRect()
